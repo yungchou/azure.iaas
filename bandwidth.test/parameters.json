@@ -1,0 +1,96 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "connections_g12_name": {
+            "value": null
+        },
+        "connections_g21_name": {
+            "value": null
+        },
+        "virtualMachines_vm1_name": {
+            "value": null
+        },
+        "virtualMachines_vm2_name": {
+            "value": null
+        },
+        "virtualMachines_vm3_name": {
+            "value": null
+        },
+        "virtualMachines_vm4_name": {
+            "value": null
+        },
+        "virtualNetworks_vnet1_name": {
+            "value": null
+        },
+        "virtualNetworks_vnet2_name": {
+            "value": null
+        },
+        "virtualNetworks_vnet3_name": {
+            "value": null
+        },
+        "virtualNetworks_vnet4_name": {
+            "value": null
+        },
+        "networkInterfaces_vm125_name": {
+            "value": null
+        },
+        "networkInterfaces_vm2341_name": {
+            "value": null
+        },
+        "networkInterfaces_vm3732_name": {
+            "value": null
+        },
+        "networkInterfaces_vm4116_name": {
+            "value": null
+        },
+        "publicIPAddresses_gw1_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_gw2_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_vm1_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_vm2_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_vm3_ip_name": {
+            "value": null
+        },
+        "publicIPAddresses_vm4_ip_name": {
+            "value": null
+        },
+        "storageAccounts_dadiag730_name": {
+            "value": null
+        },
+        "virtualNetworkGateways_gw1_name": {
+            "value": null
+        },
+        "virtualNetworkGateways_gw2_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vm2_nsg_name": {
+            "value": null
+        },
+        "networkSecurityGroups_vm4_nsg_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_vm1_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_vm2_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_vm3_name": {
+            "value": null
+        },
+        "schedules_shutdown_computevm_vm4_name": {
+            "value": null
+        },
+        "networkSecurityGroups_dnd_nsg_externalid": {
+            "value": null
+        }
+    }
+}
