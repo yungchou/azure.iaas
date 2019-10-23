@@ -1,4 +1,10 @@
-﻿$subID = ''
+﻿# https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshoot-bitlocker-boot-error#key-encryption-key-scenario
+# https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshoot-bitlocker-boot-error#script-troubleshooting
+
+#$subscriptionName = '???'
+#Select-AzureRmSubscription -SubscriptionName $subscriptionName
+
+$subID = ''
 
 $vmName = '??'
 $vault = '??'
@@ -6,17 +12,32 @@ $vault = '??'
 Add-AzAccount -SubscriptionID $subID
 
 Get-AzKeyVaultSecret -VaultName $vault `
-| where {($_.Tags.MachineName -eq $vmName) -and ($_.ContentType -match 'BEK')} `
+| where { ($_.Tags.MachineName -eq $vmName) -and ($_.ContentType -match 'BEK') } `
 | Sort-Object -Property Created `
 | ft  Created, `
-    @{Label="Content Type";Expression={$_.ContentType}}, `
-    @{Label ="Volume"; Expression = {$_.Tags.VolumeLetter}}, `
-    @{Label ="DiskEncryptionKeyFileName"; Expression = {$_.Tags.DiskEncryptionKeyFileName}}
+@{Label = "Content Type"; Expression = { $_.ContentType } }, `
+@{Label = "Volume"; Expression = { $_.Tags.VolumeLetter } }, `
+@{Label = "DiskEncryptionKeyFileName"; Expression = { $_.Tags.DiskEncryptionKeyFileName } }
+
+# Create c:\bek first
+
+#reion For non-wrapped BEK
+
+# Download the BEK file to the recovery disk.
+$vault = ''
+$bek = " ''
+$keyVaultSecret = Get-AzKeyVaultSecret -VaultName $vault -Name $bek
+$bekSecretBase64 = $keyVaultSecret.SecretValueText
+$bekFileBytes = [Convert]::FromBase64String($bekSecretbase64)
+$path = "C:\BEK\$bek.BEK"
+[System.IO.File]::WriteAllBytes($path,$bekFileBytes)
+
+# Unlock the attached disk by using the BEK file
+manage-bde -unlock F: -RecoveryKey "C:\BEK\$bek.BEK"
+
+#endregion
 
 #region For Wrapped BEK
-
-# https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshoot-bitlocker-boot-error#key-encryption-key-scenario
-# https://docs.microsoft.com/en-us/azure/virtual-machines/troubleshooting/troubleshoot-bitlocker-boot-error#script-troubleshooting
 
 $keyVaultName='??'
 $kekName='??'
@@ -72,14 +93,14 @@ $keyVaultSecret = Get-AzKeyVaultSecret -VaultName $keyVaultName -Name $secretNam
 $wrappedBekSecretBase64 = $keyVaultSecret.SecretValueText
 $jsonObject = @"
 {
-"alg": "RSA-OAEP",
-"value" : "$wrappedBekSecretBase64"
+    "alg": "RSA-OAEP",
+    "value" : "$wrappedBekSecretBase64"
 }
 "@
 
 #Get KEK Url
 $kekUrl = (Get-AzKeyVaultKey -VaultName $keyVaultName -Name $kekName).Key.Kid;
-$unwrapKeyRequestUrl = $kekUrl+ "/unwrapkey?api-version=2015-06-01";
+$unwrapKeyRequestUrl = $kekUrl+ " / unwrapkey?api-version=2015-06-01";
 
 #Call KeyVault REST API to Unwrap 
 $result = Invoke-RestMethod -Method POST -Uri $unwrapKeyRequestUrl -Headers $headers -Body $jsonObject -ContentType "application/json" -Debug
