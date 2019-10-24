@@ -1,6 +1,6 @@
 $vmName = '??'
 $rgName = '??'
-$location = 'southcentralus'
+$location = 'centralus' #'southcentralus'
 $imageName = "IMG-$vmName"
 
 $method = 1 # capturing using 1: vm, 2: managed disk, 3: non-managed disk
